@@ -3,6 +3,7 @@ import grpc
 from concurrent import futures
 import movie_pb2
 import movie_pb2_grpc
+from flask import jsonify
 
 
 class MovieServicer(movie_pb2_grpc.MovieServicer):
@@ -23,11 +24,16 @@ class MovieServicer(movie_pb2_grpc.MovieServicer):
             yield movie_pb2.MovieData(title=movie['title'], rating=movie['rating'], director=movie['director'],
                                       id=movie['id'])
 
+    def CreateMovie(self, request, context):
+        if request:
+            self.db.append(jsonify(request))
+            return movie_pb2.Result(message="The film have been added.")
+
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     movie_pb2_grpc.add_MovieServicer_to_server(MovieServicer(), server)
-    server.add_insecure_port('[::]:3001')
+    server.add_insecure_port('[::]:5000')
     server.start()
     server.wait_for_termination()
 
