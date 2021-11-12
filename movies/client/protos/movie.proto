@@ -3,7 +3,16 @@ service Movie {
   rpc GetMovieByID(MovieID) returns (MovieData) {}
   rpc GetListMovies(Empty) returns (stream MovieData) {}
   rpc CreateMovie(MovieData) returns (Result) {}
+  rpc UpdateMovieRating(MovieRating) returns (Result) {}
+  rpc DeleteMovie(MovieID) returns (Result) {}
+
 }
+
+message MovieRating {
+  string id = 1;
+  float rating = 2;
+}
+
 message MovieID {
   string id = 1;
 }

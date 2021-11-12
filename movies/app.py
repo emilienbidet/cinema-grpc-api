@@ -26,8 +26,31 @@ class MovieServicer(movie_pb2_grpc.MovieServicer):
 
     def CreateMovie(self, request, context):
         if request:
-            self.db.append(jsonify(request))
-            return movie_pb2.Result(message="The film have been added.")
+            newMovie = {
+                "title": request.title,
+                "rating": request.rating,
+                "director": request.director,
+                "id": request.id
+            }
+            self.db.append(newMovie)
+        return movie_pb2.Result(message="The film has been added.")
+
+    def UpdateMovieRating(self, request, context):
+        if request:
+            for movie in self.db:
+                if str(movie["id"]) == str(request.id):
+                    movie["rating"] = float(request.rating)
+                    return movie_pb2.Result(message="The rating has been modified.")
+        return movie_pb2.Result(message="The film cannot be found.")
+
+    def DeleteMovie(self, request, context):
+        if request:
+            for movie in self.db:
+                if str(movie["id"]) == str(request.id):
+                    self.db.remove(movie)
+                    return movie_pb2.Result(message="The movie has been removed.")
+
+        return movie_pb2.Result(message="The film cannot be found.")
 
 
 def serve():
