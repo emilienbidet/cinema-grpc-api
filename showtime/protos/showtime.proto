@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+service Showtime {
+  rpc GetSchedule(EmptySchedule) returns (stream ScheduleObject){} //Même méthode que le précédent TP
+  rpc GetMoviesByDate(MovieDate) returns (ScheduleObject){}
+}
+
+message EmptySchedule{}
+
+message MovieDate {
+  string date = 1;
+}
+/*
+message MovieID {
+  string id = 1;
+}
+*/
+message ScheduleObject{
+  MovieDate date = 1;
+  repeated string movies = 2;
+}
+//Schedule de la forme :
+/*
+    {
+      "date":"20151130",
+      "movies":[
+        "720d006c-3a57-4b6a-b18f-9b713b073f3c",
+        "a8034f44-aee4-44cf-b32c-74cf452aaaae",
+        "39ab85e5-5e8e-4dc5-afea-65dc368bd7ab"
+      ]
+    }
+ */
+/*
+message MovieData {
+    string title = 1;
+    float rating = 2;
+    string director = 3;
+    string id = 4;
+}
+*/

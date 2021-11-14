@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+service Booking  {
+  rpc GetBookings(EmptyBooking) returns (stream BookingObject){} //Même méthode que le précédent TP
+  rpc GetBookingsByUserID(UserID) returns (BookingObject){}
+  rpc AddBookingByUserID(SingleBooking) returns (BookingObject){}
+}
+
+message EmptyBooking{}
+
+message UserID {
+  string id = 1;
+}
+
+message SingleBooking{
+  string userid = 1;
+  string date = 2;
+  string movieid = 3;
+}
+
+message BookingObject{
+  string userid = 1;
+  message BookingDate{
+    string date = 1;
+    repeated string movies = 2;
+  }
+  repeated BookingDate dates = 2;
+}
+
